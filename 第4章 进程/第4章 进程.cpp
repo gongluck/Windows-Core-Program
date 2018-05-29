@@ -16,6 +16,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HMODULE hMoudle2 = nullptr;
 	GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, (LPTSTR)wWinMain, &hMoudle2);//获取wWinMain所在模块的基地址,对于dll很有用的
 
+	//获取模块路径
+	TCHAR moudlename[_MAX_PATH] = { 0 };
+	DWORD dret = GetModuleFileName(hMoudle2, moudlename, sizeof(moudlename));
+	dret = GetLongPathName(moudlename, moudlename, sizeof(moudlename));
+
 	TCHAR* cmdline = GetCommandLine();
 	int argsnum = 0;
 	PWSTR* ppArgv = CommandLineToArgvW(GetCommandLineW(), &argsnum);//切分命令行参数
@@ -75,6 +80,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	VER_SET_CONDITION(condition, VER_PLATFORMID, VER_EQUAL);
 	//比较版本
 	BOOL verret = VerifyVersionInfo(&osver, VER_MAJORVERSION | VER_MINORVERSION | VER_PLATFORMID, condition);//返回FALSE，用GetLastError查看原因
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	SECURITY_ATTRIBUTES sap, sat;
+	sap.nLength = sizeof(sap);
+	sap.lpSecurityDescriptor = nullptr;
+	sap.bInheritHandle = TRUE;//进程可继承
+	sat.nLength = sizeof(sat);
+	sat.lpSecurityDescriptor = nullptr;
+	sat.bInheritHandle = FALSE;//线程不可继承
+	STARTUPINFO si = { sizeof(si) };
+	PROCESS_INFORMATION pi;
+	TCHAR processcmd[] = TEXT("README.TXT");
+	BOOL bret = CreateProcess(TEXT("C:\\WINDOWS\\SYSTEM32\\NOTEPAD.EXE"), processcmd, &sap, &sat, TRUE/*新进程继承句柄*/, CREATE_SUSPENDED | NORMAL_PRIORITY_CLASS, nullptr, nullptr, &si, &pi);
+	//此时引用计数==2
+	ResumeThread(pi.hThread);
+	TerminateProcess(pi.hProcess, 0);//(异步)终止进程
+	CloseHandle(pi.hProcess);//==1
+	CloseHandle(pi.hThread);//==1
 
 	system("pause");
 	return 0;
