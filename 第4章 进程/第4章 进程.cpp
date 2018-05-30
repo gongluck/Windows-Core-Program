@@ -93,11 +93,32 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	PROCESS_INFORMATION pi;
 	TCHAR processcmd[] = TEXT("README.TXT");
 	BOOL bret = CreateProcess(TEXT("C:\\WINDOWS\\SYSTEM32\\NOTEPAD.EXE"), processcmd, &sap, &sat, TRUE/*新进程继承句柄*/, CREATE_SUSPENDED | NORMAL_PRIORITY_CLASS, nullptr, nullptr, &si, &pi);
-	//此时引用计数==2
+	//此时进程内核引用计数==2
 	ResumeThread(pi.hThread);
-	TerminateProcess(pi.hProcess, 0);//(异步)终止进程
-	CloseHandle(pi.hProcess);//==1
-	CloseHandle(pi.hThread);//==1
+	TerminateProcess(pi.hProcess, 10);//(异步)终止进程
+	WaitForSingleObject(pi.hProcess, INFINITE);
+	GetExitCodeProcess(pi.hProcess, &dret);//==1
+	CloseHandle(pi.hProcess);//==0
+	CloseHandle(pi.hThread);//==0
+
+	//手动提升进程权限
+	SHELLEXECUTEINFO sei = { sizeof(sei) };
+	sei.lpVerb = TEXT("runas");//特权提升
+	sei.lpFile = TEXT("NOTEPAD.EXE");
+	sei.lpParameters = TEXT("README.TXT");
+	sei.nShow = SW_SHOWNORMAL;
+	sei.fMask = SEE_MASK_NOCLOSEPROCESS;//使返回进程句柄
+	bret = ShellExecuteEx(&sei);
+
+	//进程令牌
+	HANDLE htoken = nullptr;
+	bret = OpenProcessToken(sei.hProcess, TOKEN_QUERY, &htoken);
+	TOKEN_ELEVATION_TYPE elevationtype;//获取启动类型
+	bret = GetTokenInformation(htoken, TokenElevationType, &elevationtype, sizeof(elevationtype), &len);
+	CloseHandle(htoken);
+	htoken = nullptr;
+
+	bret = CloseHandle(sei.hProcess);//SEE_MASK_NOCLOSEPROCESS
 
 	system("pause");
 	return 0;
