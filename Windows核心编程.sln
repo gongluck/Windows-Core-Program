@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第4章 进程", "第4章 �
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第5章 作业", "第5章 作业\第5章 作业.vcxproj", "{9DD7765B-0BFD-4A8A-A262-DC360BA2CBD8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第6章 线程基础", "第6章 线程基础\第6章 线程基础.vcxproj", "{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{9DD7765B-0BFD-4A8A-A262-DC360BA2CBD8}.Release|x64.Build.0 = Release|x64
 		{9DD7765B-0BFD-4A8A-A262-DC360BA2CBD8}.Release|x86.ActiveCfg = Release|Win32
 		{9DD7765B-0BFD-4A8A-A262-DC360BA2CBD8}.Release|x86.Build.0 = Release|Win32
+		{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}.Debug|x64.ActiveCfg = Debug|x64
+		{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}.Debug|x64.Build.0 = Debug|x64
+		{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}.Debug|x86.ActiveCfg = Debug|Win32
+		{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}.Debug|x86.Build.0 = Debug|Win32
+		{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}.Release|x64.ActiveCfg = Release|x64
+		{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}.Release|x64.Build.0 = Release|x64
+		{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}.Release|x86.ActiveCfg = Release|Win32
+		{3AF7AF9D-75EE-4CA4-A6DA-2AA183BD3E99}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
