@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第6章 线程基础", "第
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第7章 线程调度、优先级和关联性", "第7章 线程调度、优先级和关联性\第7章 线程调度、优先级和关联性.vcxproj", "{A84310FF-32AE-4526-885C-86A13905CB34}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第8章 用户模式下的线程同步", "第8章 用户模式下的线程同步\第8章 用户模式下的线程同步.vcxproj", "{36E5427E-E92B-441D-8A48-67ECED96412D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{A84310FF-32AE-4526-885C-86A13905CB34}.Release|x64.Build.0 = Release|x64
 		{A84310FF-32AE-4526-885C-86A13905CB34}.Release|x86.ActiveCfg = Release|Win32
 		{A84310FF-32AE-4526-885C-86A13905CB34}.Release|x86.Build.0 = Release|Win32
+		{36E5427E-E92B-441D-8A48-67ECED96412D}.Debug|x64.ActiveCfg = Debug|x64
+		{36E5427E-E92B-441D-8A48-67ECED96412D}.Debug|x64.Build.0 = Debug|x64
+		{36E5427E-E92B-441D-8A48-67ECED96412D}.Debug|x86.ActiveCfg = Debug|Win32
+		{36E5427E-E92B-441D-8A48-67ECED96412D}.Debug|x86.Build.0 = Debug|Win32
+		{36E5427E-E92B-441D-8A48-67ECED96412D}.Release|x64.ActiveCfg = Release|x64
+		{36E5427E-E92B-441D-8A48-67ECED96412D}.Release|x64.Build.0 = Release|x64
+		{36E5427E-E92B-441D-8A48-67ECED96412D}.Release|x86.ActiveCfg = Release|Win32
+		{36E5427E-E92B-441D-8A48-67ECED96412D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
