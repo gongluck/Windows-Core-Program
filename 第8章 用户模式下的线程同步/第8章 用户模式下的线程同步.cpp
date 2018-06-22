@@ -9,6 +9,8 @@ LONG g_b = FALSE;
 
 CRITICAL_SECTION g_cs; //关键段
 SRWLOCK g_rw; //读写锁
+CONDITION_VARIABLE g_cv; //条件变量
+
 
 DWORD WINAPI Thread1(PVOID param)
 {
@@ -60,6 +62,39 @@ DWORD WINAPI Thread4(PVOID param)
 	return 0;
 }
 
+DWORD WINAPI Thread5(PVOID param)
+{
+	int n = 0;
+	for (int i = 0; i < 100; ++i)
+	{
+		EnterCriticalSection(&g_cs);
+		++n;
+		if (n >= 100)
+			break;
+		if(g_i <= 0)
+			SleepConditionVariableCS(&g_cv, &g_cs, INFINITE); //解锁等待条件变量，返回时再加锁
+		g_i--;
+		LeaveCriticalSection(&g_cs);
+	}
+	return 0;
+}
+
+DWORD WINAPI Thread6(PVOID param)
+{
+	for (int i = 0; i < 100; ++i)
+	{
+		if (TryEnterCriticalSection(&g_cs))
+		{
+			g_i++;
+			WakeConditionVariable(&g_cv); //唤醒等待条件变量的线程
+			LeaveCriticalSection(&g_cs);
+		}
+		else
+			SwitchToThread();
+	}
+	return 0;
+}
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR    lpCmdLine,
@@ -89,7 +124,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	hthread1 = nullptr;
 	CloseHandle(hthread2);
 	hthread2 = nullptr;
-	DeleteCriticalSection(&g_cs);
 
 	//使用读写锁
 	InitializeSRWLock(&g_rw);
@@ -102,6 +136,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	hthread3 = nullptr;
 	CloseHandle(hthread4);
 	hthread4 = nullptr;
+
+	//条件变量(误入锁？)
+	InitializeConditionVariable(&g_cv);
+	g_i = 0;
+	HANDLE hthread5 = CreateThread(nullptr, 0, Thread5, nullptr, 0, nullptr);
+	HANDLE hthread6 = CreateThread(nullptr, 0, Thread6, nullptr, 0, nullptr);
+
+	WaitForSingleObject(hthread5, INFINITE);
+	WaitForSingleObject(hthread6, INFINITE);
+	CloseHandle(hthread5);
+	hthread5 = nullptr;
+	CloseHandle(hthread6);
+	hthread6 = nullptr;
+
+	DeleteCriticalSection(&g_cs);
 
 	system("pause");
 	return 0;
