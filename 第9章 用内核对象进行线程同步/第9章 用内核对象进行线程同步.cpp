@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "第9章 用内核对象进行线程同步.h"
+#include <Wct.h>
 
 DWORD WINAPI Thread(PVOID param)
 {
@@ -136,6 +137,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//WaitForSingleObject
 	//ReleaseMutex
 
+	//WaitForInputIdle
+	//这对于父进程和子进程之间的同步是极其有用的，因为CreateProcess函数不会等待新进程完成它的初始化工作。
+	//在试图与子线程通讯前，父线程可以使用WaitForInputIdle来判断子线程是否已经初始化完成。
+
+	//MsgWaitForMultipleObjects
+	//等候单个对象或一系列对象发出信号---标志着规定的超时已经过去，或特定类型的消息已抵达线程的输入队列。如返回条件已经满足，则立即返回
+
+	//WaitForDebugEvent
+	//获取调试事件
+
+	//SignalObjectAndWait
+	//触发一个对象并等待另一个对象
+
+	//等待链遍历(WCT)
+	//OpenThreadWaitChainSession
+	//GetThreadWaitChain
 
 	system("pause");
 	return 0;
