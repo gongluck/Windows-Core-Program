@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第8章 用户模式下的�
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第9章 用内核对象进行线程同步", "第9章 用内核对象进行线程同步\第9章 用内核对象进行线程同步.vcxproj", "{65150C96-9091-42C6-BFC0-19B6F4DC5EC4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "第10章 同步设备IO与异步设备IO", "第10章 同步设备IO与异步设备IO\第10章 同步设备IO与异步设备IO.vcxproj", "{18240848-C45D-4938-BEA3-2CE1A7A2C49C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{65150C96-9091-42C6-BFC0-19B6F4DC5EC4}.Release|x64.Build.0 = Release|x64
 		{65150C96-9091-42C6-BFC0-19B6F4DC5EC4}.Release|x86.ActiveCfg = Release|Win32
 		{65150C96-9091-42C6-BFC0-19B6F4DC5EC4}.Release|x86.Build.0 = Release|Win32
+		{18240848-C45D-4938-BEA3-2CE1A7A2C49C}.Debug|x64.ActiveCfg = Debug|x64
+		{18240848-C45D-4938-BEA3-2CE1A7A2C49C}.Debug|x64.Build.0 = Debug|x64
+		{18240848-C45D-4938-BEA3-2CE1A7A2C49C}.Debug|x86.ActiveCfg = Debug|Win32
+		{18240848-C45D-4938-BEA3-2CE1A7A2C49C}.Debug|x86.Build.0 = Debug|Win32
+		{18240848-C45D-4938-BEA3-2CE1A7A2C49C}.Release|x64.ActiveCfg = Release|x64
+		{18240848-C45D-4938-BEA3-2CE1A7A2C49C}.Release|x64.Build.0 = Release|x64
+		{18240848-C45D-4938-BEA3-2CE1A7A2C49C}.Release|x86.ActiveCfg = Release|Win32
+		{18240848-C45D-4938-BEA3-2CE1A7A2C49C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
