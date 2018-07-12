@@ -28,7 +28,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	//灵活的(跨进程)句柄复制
 	HANDLE hMutex4 = nullptr;
-	DuplicateHandle(GetCurrentProcess(), hMutex, GetCurrentProcess(), &hMutex4, 0, FALSE, DUPLICATE_SAME_ACCESS);
+	BOOL bres = DuplicateHandle(GetCurrentProcess(), hMutex, GetCurrentProcess(), &hMutex4, 0, FALSE, DUPLICATE_SAME_ACCESS);
 
 	CloseHandle(hMutex);//调用CloseHandle后，句柄表中的对应值就被重置了，hMutex不会指向原来的内核对象(无论此时引用计数是否为0)
 	hMutex = nullptr;//良好的习惯

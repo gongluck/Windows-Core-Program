@@ -28,7 +28,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	{
 		ppArgv[i];//第i个参数
 	}
-	HeapFree(GetProcessHeap(), 0, ppArgv);
+	BOOL bres = HeapFree(GetProcessHeap(), 0, ppArgv);
 	ppArgv = nullptr;
 
 	LPTSTR envirstr = GetEnvironmentStrings();//获取完整的环境变量字符串
@@ -36,36 +36,37 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	envirstr = nullptr;
 
 	//获取一个环境变量
-	DWORD len = GetEnvironmentVariable(TEXT("一个环境变量名"), nullptr, 0);
+	DWORD len = GetEnvironmentVariable(TEXT("path"), nullptr, 0);
 	PTSTR pszvalue = new TCHAR[len];
-	GetEnvironmentVariable(TEXT("一个环境变量名"), pszvalue, len);
+	len = GetEnvironmentVariable(TEXT("path"), pszvalue, len);
 	//扩展环境变量字符串
 	len = ExpandEnvironmentStrings(pszvalue, nullptr, 0);
 	PTSTR pszvalue2 = new TCHAR[len];
 	ExpandEnvironmentStrings(pszvalue, pszvalue2, len);
 	delete[] pszvalue2;
+	pszvalue2 = nullptr;
 	delete[] pszvalue;
 	pszvalue = nullptr;
 
-	SetEnvironmentVariable(TEXT("一个环境变量名"), TEXT("1"));//添加or修改
-	SetEnvironmentVariable(TEXT("一个环境变量名"), nullptr);//删除
+	bres = SetEnvironmentVariable(TEXT("一个环境变量名"), TEXT("1"));//添加or修改
+	bres = SetEnvironmentVariable(TEXT("一个环境变量名"), nullptr);//删除
 
 	//工作目录
 	len = GetCurrentDirectory(0, nullptr);
 	PTSTR dir = new TCHAR[len];
-	GetCurrentDirectory(len, dir);
+	len = GetCurrentDirectory(len, dir);
 	delete[] dir;
 	dir = nullptr;
 
 	dir = new TCHAR[_MAX_PATH];
-	GetFullPathName(TEXT("Windows核心编程.sln"), _MAX_PATH, dir, nullptr);//不好用,但这个函数可以获取每个驱动器对应的当前目录~
+	len = GetFullPathName(TEXT("Windows核心编程.sln"), _MAX_PATH, dir, nullptr);//不好用,但这个函数可以获取每个驱动器对应的当前目录~
 	delete[] dir;
 	dir = nullptr;
 
 	//系统版本
 	OSVERSIONINFOEX ver = { 0 };
 	ver.dwOSVersionInfoSize = sizeof(ver);
-	GetVersionEx((LPOSVERSIONINFO)&ver);
+	bres = GetVersionEx((LPOSVERSIONINFO)&ver);
 
 	//比较版本差异
 	//构造一个版本
@@ -79,7 +80,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	VER_SET_CONDITION(condition, VER_MINORVERSION, VER_EQUAL);
 	VER_SET_CONDITION(condition, VER_PLATFORMID, VER_EQUAL);
 	//比较版本
-	BOOL verret = VerifyVersionInfo(&osver, VER_MAJORVERSION | VER_MINORVERSION | VER_PLATFORMID, condition);//返回FALSE，用GetLastError查看原因
+	bres = VerifyVersionInfo(&osver, VER_MAJORVERSION | VER_MINORVERSION | VER_PLATFORMID, condition);//返回FALSE，用GetLastError查看原因
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	SECURITY_ATTRIBUTES sap, sat;
@@ -118,6 +119,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	CloseHandle(htoken);
 	htoken = nullptr;
 
+	TerminateProcess(sei.hProcess, 10);//(异步)终止进程
 	bret = CloseHandle(sei.hProcess);//SEE_MASK_NOCLOSEPROCESS
 
 	system("pause");

@@ -11,14 +11,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 	//在调试一个作业(Job)程序时发现，如下代码总是返回TRUE，无论是从VS中启动调试还是从资源管理器中启动。
 	//原来，从资源管理器或者VS中启动程序时，系统会自动把该进程放到一个作业(Job)中。知道了这一点，要想让这段代码返回FALSE，只要从CMD中启动该程序即可。
-	BOOL bInJob;
-	IsProcessInJob(GetCurrentProcess(), NULL, &bInJob);
+	BOOL bInJob = FALSE;
+	BOOL bret = IsProcessInJob(GetCurrentProcess(), nullptr, &bInJob);
 	if (bInJob)
 		MessageBox(nullptr, TEXT("process already in a job"), TEXT("info"), MB_OK);
 	else
 		MessageBox(nullptr, TEXT("process not in a job"), TEXT("info"), MB_OK);
 
-	BOOL bret;
 	HANDLE hJob = CreateJobObject(nullptr, TEXT("第5章 作业"));
 	JOBOBJECT_BASIC_LIMIT_INFORMATION basiclimit = { 0 };
 	//作业(进程沙盒)限制
