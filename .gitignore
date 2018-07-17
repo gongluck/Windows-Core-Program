@@ -17,3 +17,4 @@
 *.filters
 *.db-shm
 *.db-wal
+*.enc

@@ -64,14 +64,10 @@ DWORD WINAPI Thread4(PVOID param)
 
 DWORD WINAPI Thread5(PVOID param)
 {
-	int n = 0;
 	for (int i = 0; i < 100; ++i)
 	{
 		EnterCriticalSection(&g_cs);
-		++n;
-		if (n >= 100)
-			break;
-		if(g_i <= 0)
+		if (g_i == 0)
 			SleepConditionVariableCS(&g_cv, &g_cs, INFINITE); //解锁等待条件变量，返回时再加锁
 		g_i--;
 		LeaveCriticalSection(&g_cs);
@@ -81,11 +77,13 @@ DWORD WINAPI Thread5(PVOID param)
 
 DWORD WINAPI Thread6(PVOID param)
 {
-	for (int i = 0; i < 100; ++i)
+	int n = 0;
+	while(n < 100)
 	{
 		if (TryEnterCriticalSection(&g_cs))
 		{
 			g_i++;
+			n++;
 			WakeConditionVariable(&g_cv); //唤醒等待条件变量的线程
 			LeaveCriticalSection(&g_cs);
 		}
@@ -112,8 +110,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	//使用关键段
 	//InitializeCriticalSection(&g_cs);
+	///InitializeCriticalSectionAndSpinCount的作用不同于InitializeCriticalSection之处就在于设置了一个循环锁，
+	///不至于使线程立刻被置于等待状态而耗费大量的CPU周期，而在dwSpinCount后才转为内核方式进入等待状态。
 	BOOL bret = InitializeCriticalSectionAndSpinCount(&g_cs, 1);//初始化关键段并用上旋转锁
-	oldl = SetCriticalSectionSpinCount(&g_cs, 4000);
+	oldl = SetCriticalSectionSpinCount(&g_cs, 4000);//设置旋转锁次数
 	g_i = 0;
 	HANDLE hthread1 = CreateThread(nullptr, 0, Thread1, nullptr, 0, nullptr);
 	HANDLE hthread2 = CreateThread(nullptr, 0, Thread2, nullptr, 0, nullptr);
