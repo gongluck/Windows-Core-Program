@@ -96,7 +96,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	FILETIME duetime = { 0 };
 	duetime.dwLowDateTime = li.LowPart; 
 	duetime.dwHighDateTime = li.HighPart;
-	SetThreadpoolTimer(ptimer, &duetime, 1, 0); //设置定时器
+	SetThreadpoolTimer(ptimer, &duetime, 1/*再次调用的时间间隔*/, 0/*用来给回调函数的执行时间增加一些随机性*/); //设置定时器
 	WaitForThreadpoolTimerCallbacks(ptimer, FALSE); //调试发现，TimerCB没机会执行，也没有阻塞主线程啊!?
 	bres = IsThreadpoolTimerSet(ptimer); //检查定时器状态
 

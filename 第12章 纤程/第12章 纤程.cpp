@@ -12,7 +12,7 @@ VOID WINAPI FiberFun(LPVOID lpFiberParameter)
 	//纤程参数
 	LPVOID pFiberCurrent = GetCurrentFiber();
 	BOOL bres = IsThreadAFiber();
-	LPVOID pCurrentData = GetFiberData();
+	LPVOID pCurrentData = GetFiberData();//获取创建纤程时传递的参数,pCurrentData==lpFiberParameter==555
 
 	//纤程局部存储区
 	bres = FlsSetValue(g_index, (PVOID)200);
@@ -43,13 +43,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	PVOID flsvalue = FlsGetValue(g_index);
 
 	//创建纤程
-	LPVOID pFiberCreate = CreateFiberEx(0, 0, FIBER_FLAG_FLOAT_SWITCH, FiberFun, nullptr);
+	LPVOID pFiberCreate = CreateFiberEx(0, 0, FIBER_FLAG_FLOAT_SWITCH, FiberFun, (LPVOID)555);
 
 	//切换纤程
 	SwitchToFiber(pFiberCreate);
 
 	bres = FlsFree(g_index);
-	//bres = FlsFree(g_index);
 	
 	//销毁纤程
 	DeleteFiber(pFiberCreate);

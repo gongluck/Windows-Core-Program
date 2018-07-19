@@ -135,6 +135,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HANDLE hts[2];
 	for (int i = 0; i < 2; ++i)
 		hts[i] = CreateThread(nullptr, 0, workthread, iocp, 0, nullptr);
+	Sleep(5000);
 	bres = PostQueuedCompletionStatus(iocp, 100, 1, &ol); //模拟发送IO请求完成
 	bres = ReadFile(hFile2, buf2, 1024, nullptr, &ol2);
 	dres = GetLastError();
