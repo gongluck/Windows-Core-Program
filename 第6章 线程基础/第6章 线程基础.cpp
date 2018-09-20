@@ -20,13 +20,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
+	//CreateThread和_beginthreadex的本质区别
+	//https://blog.csdn.net/morewindows/article/details/7421759
+
 	//创建Windows线程
 	HANDLE hthread = CreateThread(nullptr, 0, ThreadProc, nullptr, CREATE_SUSPENDED, nullptr);
 	ResumeThread(hthread);
 	system("pause");
-	BOOL bret = TerminateThread(hthread, 0);//终止线程（异步）,可能会导致资源没有释放（例如没有调用线程里类实例的析构函数！）
+	BOOL bRet = TerminateThread(hthread, 0);//终止线程（异步）,可能会导致资源没有释放（例如没有调用线程里类实例的析构函数！）
 	DWORD exitcode;
-	bret = GetExitCodeThread(hthread, &exitcode);//可能是STILL_ACTIVE或者退出代码
+	bRet = GetExitCodeThread(hthread, &exitcode);//可能是STILL_ACTIVE或者退出代码
 	WaitForSingleObject(hthread, INFINITE);
 	CloseHandle(hthread);
 	hthread = nullptr;
@@ -37,7 +40,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	hthread = nullptr;
 
 	//将GetCurrentThread()得到的伪句柄转换成可用的句柄.(记住：句柄表属于进程，线程共享句柄表)
-	bret = DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), &hthread, 0, FALSE, DUPLICATE_SAME_ACCESS);
+	bRet = DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), &hthread, 0, FALSE, DUPLICATE_SAME_ACCESS);
 	CloseHandle(hthread);
 
 	system("pause");

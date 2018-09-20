@@ -34,8 +34,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	char ansic[] = "第2章 字符和字符串处理";
 	int ilen = MultiByteToWideChar(CP_ACP, 0, ansic, -1, NULL, 0);
 	wchar_t* unicode = new wchar_t[ilen];
-	memset(unicode, 0, sizeof(wchar_t)*ilen);
 	ilen = MultiByteToWideChar(CP_ACP, 0, ansic, -1, unicode, ilen);//我觉得书中对最后一个参数的解释错了，应该是“字符数”。
+	MessageBoxW(nullptr, unicode, L"结果", MB_OK);
 	delete[] unicode;
 	unicode = nullptr;
 

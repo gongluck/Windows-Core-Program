@@ -39,8 +39,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HANDLE hthread = CreateThread(nullptr, 0, Thread, nullptr, 0, nullptr);
 
 	//等待线程被触发
-	DWORD dres = WaitForSingleObject(hthread, INFINITE);//INFINITE等待无限长的时间
-	switch (dres)
+	DWORD dRet = WaitForSingleObject(hthread, INFINITE);//INFINITE等待无限长的时间
+	switch (dRet)
 	{
 	case WAIT_OBJECT_0:
 		//线程被触发(终止)
@@ -59,8 +59,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	for (int i = 0; i < 3; ++i)
 		hthreads[i] = CreateThread(nullptr, 0, Thread, nullptr, 0, nullptr);
 	//等待多个线程被触发
-	dres = WaitForMultipleObjects(3, hthreads, FALSE, INFINITE);
-	switch (dres)
+	dRet = WaitForMultipleObjects(3, hthreads, FALSE, INFINITE);
+	switch (dRet)
 	{
 	case WAIT_OBJECT_0+0:
 		//线程被触发(终止)
@@ -84,7 +84,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//FAILED
 		break;
 	}
-	dres = WaitForMultipleObjects(3, hthreads, TRUE, INFINITE);
+	dRet = WaitForMultipleObjects(3, hthreads, TRUE, INFINITE);
 	for (int i = 0; i < 3; ++i)
 	{
 		if (hthreads[i] == nullptr)
@@ -100,7 +100,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	for (int i = 0; i < 2; ++i)
 		hthreads2[i] = CreateThread(nullptr, 0, Thread2, nullptr, 0, nullptr);
 	SetEvent(g_event);//触发事件
-	dres = WaitForMultipleObjects(2, hthreads2, TRUE, INFINITE);
+	dRet = WaitForMultipleObjects(2, hthreads2, TRUE, INFINITE);
 	for (int i = 0; i < 2; ++i)
 	{
 		if (hthreads2[i] == nullptr)

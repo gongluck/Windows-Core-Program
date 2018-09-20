@@ -98,6 +98,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR    lpCmdLine,
 	_In_ int       nCmdShow)
 {
+	//C++11或boost都有更好用的原子操作，锁
 	//原子操作Interlocked系列
 	LONG newl = InterlockedAdd(&g_i, 1);
 	LONG oldl = InterlockedExchange(&g_i, 10);
@@ -112,7 +113,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//InitializeCriticalSection(&g_cs);
 	///InitializeCriticalSectionAndSpinCount的作用不同于InitializeCriticalSection之处就在于设置了一个循环锁，
 	///不至于使线程立刻被置于等待状态而耗费大量的CPU周期，而在dwSpinCount后才转为内核方式进入等待状态。
-	BOOL bret = InitializeCriticalSectionAndSpinCount(&g_cs, 1);//初始化关键段并用上旋转锁
+	BOOL bRet = InitializeCriticalSectionAndSpinCount(&g_cs, 1);//初始化关键段并用上旋转锁
 	oldl = SetCriticalSectionSpinCount(&g_cs, 4000);//设置旋转锁次数
 	g_i = 0;
 	HANDLE hthread1 = CreateThread(nullptr, 0, Thread1, nullptr, 0, nullptr);

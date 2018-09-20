@@ -11,7 +11,7 @@ VOID WINAPI funComplete(
 	_Inout_ LPOVERLAPPED lpOverlapped
 )
 {
-
+	DWORD id = GetCurrentProcessId();
 }
 
 //IO完成端口工作线程
@@ -116,6 +116,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	ol2.OffsetHigh = 0;
 	ol2.hEvent = nullptr;
 	dres = ReadFileEx(hFile2, buf2, 1024, &ol2, funComplete);//回调函数在同一个线程空间
+	DWORD id = GetCurrentProcessId();
 	//置为可提醒状态
 	//APC队列中只要有一个，线程就不会进入睡眠
 	dres = SleepEx(INFINITE, TRUE);
@@ -136,7 +137,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	for (int i = 0; i < 2; ++i)
 		hts[i] = CreateThread(nullptr, 0, workthread, iocp, 0, nullptr);
 	Sleep(5000);
-	bres = PostQueuedCompletionStatus(iocp, 100, 1, &ol); //模拟发送IO请求完成
+	bres = PostQueuedCompletionStatus(iocp, 100, 50, &ol); //模拟发送IO请求完成
 	bres = ReadFile(hFile2, buf2, 1024, nullptr, &ol2);
 	dres = GetLastError();
 

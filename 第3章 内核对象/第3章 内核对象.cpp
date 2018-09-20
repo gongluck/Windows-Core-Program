@@ -14,8 +14,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	sa.lpSecurityDescriptor = nullptr;
 	sa.bInheritHandle = TRUE;//可被继承
 	HANDLE hMutex = CreateMutex(&sa, FALSE, nullptr);
-	SetHandleInformation(hMutex, HANDLE_FLAG_INHERIT, 0);//关闭可继承
-	SetHandleInformation(hMutex, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT);//打开可继承
+	BOOL bRet = SetHandleInformation(hMutex, HANDLE_FLAG_INHERIT, 0);//关闭可继承
+	bRet = SetHandleInformation(hMutex, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT);//打开可继承
 
 	HANDLE hMutex2 = CreateMutex(nullptr, FALSE, TEXT("有名的Mutex"));
 	DWORD err = GetLastError();
@@ -28,15 +28,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	//灵活的(跨进程)句柄复制
 	HANDLE hMutex4 = nullptr;
-	BOOL bres = DuplicateHandle(GetCurrentProcess(), hMutex, GetCurrentProcess(), &hMutex4, 0, FALSE, DUPLICATE_SAME_ACCESS);
+	bRet = DuplicateHandle(GetCurrentProcess(), hMutex, GetCurrentProcess(), &hMutex4, 0, FALSE, DUPLICATE_SAME_ACCESS);
 
-	CloseHandle(hMutex);//调用CloseHandle后，句柄表中的对应值就被重置了，hMutex不会指向原来的内核对象(无论此时引用计数是否为0)
+	bRet = CloseHandle(hMutex);//调用CloseHandle后，句柄表中的对应值就被重置了，hMutex不会指向原来的内核对象(无论此时引用计数是否为0)
 	hMutex = nullptr;//良好的习惯
-	CloseHandle(hMutex2);
+	bRet = CloseHandle(hMutex2);
 	hMutex2 = nullptr;
-	CloseHandle(hMutex3);
+	bRet = CloseHandle(hMutex3);
 	hMutex3 = nullptr;
-	CloseHandle(hMutex4);
+	bRet = CloseHandle(hMutex4);
 	hMutex4 = nullptr;
 	system("pause");
 	return 0;
